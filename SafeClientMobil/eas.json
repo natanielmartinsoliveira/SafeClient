@@ -1,0 +1,26 @@
+{
+  "cli": {
+    "version": ">= 12.0.0",
+    "appVersionSource": "local"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "API_BASE_URL": "http://localhost:3000"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "API_BASE_URL": "https://api-preview.safeclient.app"
+      }
+    },
+    "production": {
+      "env": {
+        "API_BASE_URL": "https://api.safeclient.app"
+      }
+    }
+  }
+}

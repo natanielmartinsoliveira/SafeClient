@@ -1,0 +1,32 @@
+{
+  "name": "safeclient",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SafeClient — monorepo root (quality pipeline tooling)",
+  "scripts": {
+    "prepare": "husky",
+    "lint:api": "cd SafeClientApi && npm run lint",
+    "lint:web": "cd SafeClientWeb && npm run lint",
+    "lint": "npm run lint:api && npm run lint:web",
+    "format:api": "cd SafeClientApi && npm run format",
+    "format:web": "cd SafeClientWeb && npm run format",
+    "format": "npm run format:api && npm run format:web",
+    "test:api": "cd SafeClientApi && npm test",
+    "test": "npm run test:api"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.0.0",
+    "@commitlint/config-conventional": "^19.0.0",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.0.0"
+  },
+  "lint-staged": {
+    "SafeClientApi/src/**/*.ts": [
+      "bash -c 'cd SafeClientApi && npx eslint --fix'",
+      "bash -c 'cd SafeClientApi && npx prettier --write'"
+    ],
+    "SafeClientWeb/app/**/*.{ts,tsx}": [
+      "bash -c 'cd SafeClientWeb && npx prettier --write'"
+    ]
+  }
+}

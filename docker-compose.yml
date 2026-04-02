@@ -1,0 +1,60 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: safeclient_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB:       ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER} -d ${DB_NAME}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./SafeClientApi
+      dockerfile: Dockerfile
+    container_name: safeclient_api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - '3000:3000'
+    environment:
+      DB_HOST:              postgres
+      DB_PORT:              ${DB_PORT}
+      DB_USER:              ${DB_USER}
+      DB_PASSWORD:          ${DB_PASSWORD}
+      DB_NAME:              ${DB_NAME}
+      NODE_ENV:             ${NODE_ENV}
+      PORT:                 ${PORT}
+      CONTACT_HASH_SECRET:  ${CONTACT_HASH_SECRET}
+      APP_SIGNING_SECRET:   ${APP_SIGNING_SECRET}
+      SIGNATURE_WINDOW_SEC: ${SIGNATURE_WINDOW_SEC}
+      JWT_SECRET:           ${JWT_SECRET}
+
+  web:
+    build:
+      context: ./SafeClientWeb
+      dockerfile: Dockerfile
+    container_name: safeclient_web
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - '3001:3001'
+    environment:
+      PORT:               3001
+      API_INTERNAL_URL:   http://api:3000
+      APP_SIGNING_SECRET: ${APP_SIGNING_SECRET}
+
+volumes:
+  postgres_data:
