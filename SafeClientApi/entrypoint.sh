@@ -1,13 +1,15 @@
 #!/bin/sh
 set -e
 
-echo "▶ Iniciando API (TypeORM sync das tabelas)..."
+APP_PORT=${PORT:-3000}
+
+echo "▶ Iniciando API (TypeORM sync das tabelas) na porta $APP_PORT..."
 node dist/main.js &
 API_PID=$!
 
-echo "⏳ Aguardando porta 3000 ficar disponível..."
+echo "⏳ Aguardando porta $APP_PORT ficar disponível..."
 RETRIES=30
-until nc -z localhost 3000 2>/dev/null || [ $RETRIES -eq 0 ]; do
+until nc -z localhost "$APP_PORT" 2>/dev/null || [ $RETRIES -eq 0 ]; do
   RETRIES=$((RETRIES - 1))
   sleep 2
 done
