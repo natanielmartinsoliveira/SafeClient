@@ -1,9 +1,4 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as crypto from 'crypto';
 import { Request } from 'express';
 import { nonceStore } from './nonce-store';
@@ -29,11 +24,19 @@ export class AppAuthGuard implements CanActivate {
     // Preflight CORS — deixa passar sem autenticação
     if (req.method === 'OPTIONS') return true;
 
+    // Em desenvolvimento, bypassa HMAC para facilitar testes via Swagger/curl
+    if (process.env.NODE_ENV !== 'production') return true;
+
     // Rotas públicas (sem HMAC): auth + web + admin (protegidas por JWT no controller)
-    if (req.path.startsWith('/auth/') || req.path.startsWith('/web/') || req.path.startsWith('/admin/')) return true;
+    if (
+      req.path.startsWith('/auth/') ||
+      req.path.startsWith('/web/') ||
+      req.path.startsWith('/admin/')
+    )
+      return true;
 
     const timestamp = req.headers['x-timestamp'] as string;
-    const nonce     = req.headers['x-nonce']     as string;
+    const nonce = req.headers['x-nonce'] as string;
     const signature = req.headers['x-signature'] as string;
 
     if (!timestamp || !nonce || !signature) {
@@ -42,7 +45,7 @@ export class AppAuthGuard implements CanActivate {
 
     // 1. Valida timestamp
     const now = Math.floor(Date.now() / 1000);
-    const ts  = parseInt(timestamp, 10);
+    const ts = parseInt(timestamp, 10);
     if (isNaN(ts) || Math.abs(now - ts) > this.windowSec) {
       throw new UnauthorizedException('Timestamp inválido ou expirado.');
     }
@@ -58,17 +61,13 @@ export class AppAuthGuard implements CanActivate {
       throw new UnauthorizedException('Configuração de segurança ausente no servidor.');
     }
 
-    const message  = `${timestamp}:${nonce}:${req.method}:${req.path}`;
-    const expected = crypto
-      .createHmac('sha256', secret)
-      .update(message)
-      .digest('hex');
+    const message = `${timestamp}:${nonce}:${req.method}:${req.path}`;
+    const expected = crypto.createHmac('sha256', secret).update(message).digest('hex');
 
     // timingSafeEqual previne timing attacks
     const sigBuf = Buffer.from(signature.padEnd(64, '0'));
     const expBuf = Buffer.from(expected.padEnd(64, '0'));
-    const valid  = sigBuf.length === expBuf.length &&
-                   crypto.timingSafeEqual(sigBuf, expBuf);
+    const valid = sigBuf.length === expBuf.length && crypto.timingSafeEqual(sigBuf, expBuf);
 
     if (!valid) {
       throw new UnauthorizedException('Assinatura inválida.');

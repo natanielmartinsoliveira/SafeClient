@@ -14,24 +14,22 @@
     "test:api": "cd SafeClientApi && npm test",
     "test": "npm run test:api"
   },
+  "lint-staged": {
+    "SafeClientApi/src/**/*.ts": [
+      "SafeClientApi/node_modules/.bin/eslint --fix --config SafeClientApi/.eslintrc.js",
+      "SafeClientApi/node_modules/.bin/prettier --write --config SafeClientApi/.prettierrc"
+    ],
+    "SafeClientWeb/app/**/*.{ts,tsx}": [
+      "SafeClientWeb/node_modules/.bin/prettier --write --config SafeClientWeb/.prettierrc"
+    ],
+    "SafeClientWeb/lib/**/*.ts": [
+      "SafeClientWeb/node_modules/.bin/prettier --write --config SafeClientWeb/.prettierrc"
+    ]
+  },
   "devDependencies": {
     "@commitlint/cli": "^19.0.0",
     "@commitlint/config-conventional": "^19.0.0",
     "husky": "^9.0.0",
     "lint-staged": "^15.0.0"
-  },
-  "lint-staged": {
-    "SafeClientApi/src/**/*.ts": [
-      "bash -c 'cd SafeClientApi && npx eslint --fix'",
-      "bash -c 'cd SafeClientApi && npx prettier --write'"
-    ],
-    "SafeClientWeb/app/**/*.{ts,tsx}": [
-      "bash -c 'cd SafeClientWeb && npx eslint --fix'",
-      "bash -c 'cd SafeClientWeb && npx prettier --write'"
-    ],
-    "SafeClientWeb/lib/**/*.ts": [
-      "bash -c 'cd SafeClientWeb && npx eslint --fix'",
-      "bash -c 'cd SafeClientWeb && npx prettier --write'"
-    ]
   }
 }
