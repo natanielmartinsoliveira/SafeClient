@@ -14,6 +14,11 @@ export class ReportsService {
     private readonly reportRepo: Repository<Report>,
   ) {}
 
+  private hashEmail(email: string): string {
+    const secret = process.env.CONTACT_HASH_SECRET ?? '';
+    return crypto.createHmac('sha256', secret).update(email.toLowerCase().trim()).digest('hex');
+  }
+
   async create(
     dto: CreateReportDto,
     ip?: string,
@@ -30,7 +35,9 @@ export class ReportsService {
         where: { contactHash, contactType: dto.contactType, ipHash },
       });
       if (existing && existing.createdAt > since) {
-        throw new ConflictException('Você já registrou um relato para este contato nas últimas 24h.');
+        throw new ConflictException(
+          'Você já registrou um relato para este contato nas últimas 24h.',
+        );
       }
     }
 
@@ -48,7 +55,7 @@ export class ReportsService {
       ipHash,
       active: true,
       userId: userId ?? null,
-      userEmail: userEmail ?? null,
+      userEmailHash: userEmail ? this.hashEmail(userEmail) : null,
     };
     const report = this.reportRepo.create(reportData);
     const saved = await this.reportRepo.save(report);
@@ -63,9 +70,6 @@ export class ReportsService {
   }
 
   async deactivateByContactHash(contactHash: string, contactType: ContactType): Promise<void> {
-    await this.reportRepo.update(
-      { contactHash, contactType, active: true },
-      { active: false },
-    );
+    await this.reportRepo.update({ contactHash, contactType, active: true }, { active: false });
   }
 }

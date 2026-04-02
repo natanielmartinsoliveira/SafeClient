@@ -34,9 +34,9 @@ export class Report {
   @Column({ nullable: true })
   userId: string | null;
 
-  /** E-mail do usuário para identificação rápida sem join */
-  @Column({ nullable: true })
-  userEmail: string | null;
+  /** HMAC-SHA256 do e-mail do usuário — prova autoria sem expor dado pessoal (LGPD) */
+  @Column({ length: 64, nullable: true })
+  userEmailHash: string | null;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;

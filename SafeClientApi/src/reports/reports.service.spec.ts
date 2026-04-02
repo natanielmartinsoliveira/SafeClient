@@ -25,10 +25,7 @@ describe('ReportsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        ReportsService,
-        { provide: getRepositoryToken(Report), useFactory: mockRepo },
-      ],
+      providers: [ReportsService, { provide: getRepositoryToken(Report), useFactory: mockRepo }],
     }).compile();
 
     service = module.get<ReportsService>(ReportsService);
@@ -59,11 +56,10 @@ describe('ReportsService', () => {
       const existing = { id: 'x', createdAt: new Date() } as Report;
       repo.findOne.mockResolvedValue(existing);
 
-      await expect(service.create(dto, '127.0.0.1'))
-        .rejects.toThrow(ConflictException);
+      await expect(service.create(dto, '127.0.0.1')).rejects.toThrow(ConflictException);
     });
 
-    it('should attach userId and userEmail when provided', async () => {
+    it('should attach userId and hashed userEmail when provided', async () => {
       repo.findOne.mockResolvedValue(null);
       repo.update.mockResolvedValue({ affected: 0, raw: [], generatedMaps: [] } as UpdateResult);
       const saved = { id: 'uuid-2', createdAt: new Date() } as Report;
@@ -72,7 +68,7 @@ describe('ReportsService', () => {
 
       await service.create(dto, undefined, 'user-id', 'user@test.com');
       expect(repo.create).toHaveBeenCalledWith(
-        expect.objectContaining({ userId: 'user-id', userEmail: 'user@test.com' }),
+        expect.objectContaining({ userId: 'user-id', userEmailHash: expect.any(String) }),
       );
     });
   });
