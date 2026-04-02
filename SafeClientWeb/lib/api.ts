@@ -49,7 +49,7 @@ export async function lookupContact(
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error((err as any)?.message ?? `HTTP ${res.status}`);
+    throw new Error((err as { message?: string })?.message ?? `HTTP ${res.status}`);
   }
 
   return res.json() as Promise<LookupResult>;

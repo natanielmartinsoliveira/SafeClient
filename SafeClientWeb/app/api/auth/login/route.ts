@@ -5,18 +5,25 @@ const API_URL = process.env.API_INTERNAL_URL ?? 'http://localhost:3000';
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
-  const apiRes = await fetch(`${API_URL}/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
+  let apiRes: Response;
+  try {
+    apiRes = await fetch(`${API_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'API unreachable';
+    return NextResponse.json({ message: msg }, { status: 502 });
+  }
 
   if (!apiRes.ok) {
     const err = await apiRes.json().catch(() => ({}));
     return NextResponse.json(err, { status: apiRes.status });
   }
 
-  const { access_token, email } = await apiRes.json();
+  const data = await apiRes.json();
+  const { access_token, email } = data;
 
   const res = NextResponse.json({ email });
   res.cookies.set('safeclient_token', access_token, {

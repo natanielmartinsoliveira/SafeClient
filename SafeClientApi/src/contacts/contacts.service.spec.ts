@@ -84,7 +84,7 @@ describe('ContactsService', () => {
     reportsService.findByContactHash.mockResolvedValue(reports);
 
     const result = await service.lookup('test', ContactType.EMAIL);
-    expect((result as any).recommendations).toContain(
+    expect((result as { recommendations: string[] }).recommendations).toContain(
       'Não forneça o serviço sem confirmação de pagamento.',
     );
   });

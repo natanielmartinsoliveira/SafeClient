@@ -26,6 +26,11 @@
       "bash -c 'cd SafeClientApi && npx prettier --write'"
     ],
     "SafeClientWeb/app/**/*.{ts,tsx}": [
+      "bash -c 'cd SafeClientWeb && npx eslint --fix'",
+      "bash -c 'cd SafeClientWeb && npx prettier --write'"
+    ],
+    "SafeClientWeb/lib/**/*.ts": [
+      "bash -c 'cd SafeClientWeb && npx eslint --fix'",
       "bash -c 'cd SafeClientWeb && npx prettier --write'"
     ]
   }

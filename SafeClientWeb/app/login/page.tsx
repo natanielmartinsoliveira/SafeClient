@@ -6,10 +6,10 @@ import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail]       = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError]       = useState('');
-  const [loading, setLoading]   = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -39,35 +39,44 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center px-4 py-12"
-      style={{ minHeight: 'calc(100vh - 57px)', background: '#F5F0FF' }}>
-
+    <main
+      className="flex flex-col items-center justify-center px-4 py-12"
+      style={{ minHeight: 'calc(100vh - 57px)', background: '#F5F0FF' }}
+    >
       {/* Decoração */}
-      <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full opacity-50"
-          style={{ background: '#DDD4F0' }} />
-        <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] rounded-full opacity-40"
-          style={{ background: '#DDD4F0' }} />
+      <div className="pointer-events-none fixed inset-0 overflow-hidden" style={{ zIndex: 0 }}>
+        <div
+          className="absolute -top-32 -right-32 w-96 h-96 rounded-full opacity-50"
+          style={{ background: '#DDD4F0' }}
+        />
+        <div
+          className="absolute -bottom-40 -left-40 w-[500px] h-[500px] rounded-full opacity-40"
+          style={{ background: '#DDD4F0' }}
+        />
       </div>
 
-      <div className="relative w-full max-w-sm flex flex-col items-center gap-8">
-
+      <div
+        className="relative w-full max-w-sm flex flex-col items-center gap-8"
+        style={{ zIndex: 1 }}
+      >
         {/* Logo */}
         <img src="/logo.png" alt="SafeClient" className="w-52 h-auto drop-shadow-lg" />
 
         {/* Card */}
-        <div className="w-full rounded-2xl shadow-xl p-8 flex flex-col gap-5"
-          style={{ background: '#FFFFFF', border: '1.5px solid #E0D8F4' }}>
-
+        <div
+          className="w-full rounded-2xl shadow-xl p-8 flex flex-col gap-5"
+          style={{ background: '#FFFFFF', border: '1.5px solid #E0D8F4' }}
+        >
           <div>
-            <h1 className="text-xl font-bold" style={{ color: '#2E1B6E' }}>Entrar</h1>
+            <h1 className="text-xl font-bold" style={{ color: '#2E1B6E' }}>
+              Entrar
+            </h1>
             <p className="text-sm mt-1" style={{ color: '#9887B8' }}>
               Acesse sua conta SafeClient
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-semibold" style={{ color: '#6B5B9E' }}>
                 E-mail
@@ -109,8 +118,10 @@ export default function LoginPage() {
             </div>
 
             {error && (
-              <p className="text-xs text-center rounded-lg px-3 py-2"
-                style={{ background: '#FEE2E2', color: '#DC2626' }}>
+              <p
+                className="text-xs text-center rounded-lg px-3 py-2"
+                style={{ background: '#FEE2E2', color: '#DC2626' }}
+              >
                 {error}
               </p>
             )}
@@ -119,16 +130,15 @@ export default function LoginPage() {
               type="submit"
               disabled={loading}
               className="w-full py-3.5 rounded-xl text-white font-bold text-sm transition-opacity disabled:opacity-60"
-              style={{ background: 'linear-gradient(135deg, #8B6FC4 0%, #5C3D9E 100%)' }}>
+              style={{ background: 'linear-gradient(135deg, #8B6FC4 0%, #5C3D9E 100%)' }}
+            >
               {loading ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
 
           <p className="text-xs text-center" style={{ color: '#9887B8' }}>
             Não tem conta?{' '}
-            <Link href="/cadastro"
-              className="font-semibold"
-              style={{ color: '#7B52B8' }}>
+            <Link href="/cadastro" className="font-semibold" style={{ color: '#7B52B8' }}>
               Criar conta
             </Link>
           </p>

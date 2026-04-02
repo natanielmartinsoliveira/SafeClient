@@ -3,9 +3,7 @@ import SearchPage from './components/SearchPage';
 
 function decodeEmail(token: string): string | null {
   try {
-    const payload = JSON.parse(
-      Buffer.from(token.split('.')[1], 'base64url').toString(),
-    );
+    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString());
     return payload.email ?? null;
   } catch {
     return null;

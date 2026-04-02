@@ -1,10 +1,11 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import * as crypto from 'crypto';
 import { Report } from './report.entity';
 import { CreateReportDto } from './dto/create-report.dto';
 import { hashContact } from '../common/utils/contact-hasher.util';
+import { ContactType } from '../common/enums/contact-type.enum';
 
 @Injectable()
 export class ReportsService {
@@ -39,7 +40,7 @@ export class ReportsService {
       { active: true },
     );
 
-    const report = this.reportRepo.create({
+    const reportData: DeepPartial<Report> = {
       contactHash,
       contactType: dto.contactType,
       flags: dto.flags,
@@ -48,20 +49,20 @@ export class ReportsService {
       active: true,
       userId: userId ?? null,
       userEmail: userEmail ?? null,
-    });
-
+    };
+    const report = this.reportRepo.create(reportData);
     const saved = await this.reportRepo.save(report);
     return { id: saved.id, createdAt: saved.createdAt };
   }
 
-  async findByContactHash(contactHash: string, contactType: any): Promise<Report[]> {
+  async findByContactHash(contactHash: string, contactType: ContactType): Promise<Report[]> {
     return this.reportRepo.find({
       where: { contactHash, contactType, active: true },
       order: { createdAt: 'DESC' },
     });
   }
 
-  async deactivateByContactHash(contactHash: string, contactType: any): Promise<void> {
+  async deactivateByContactHash(contactHash: string, contactType: ContactType): Promise<void> {
     await this.reportRepo.update(
       { contactHash, contactType, active: true },
       { active: false },

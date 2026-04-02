@@ -1,3 +1,9 @@
+// Mock bcrypt before any imports to avoid native binary SIGSEGV in WSL/Jest
+jest.mock('bcryptjs', () => ({
+  hash: jest.fn().mockResolvedValue('$2b$10$mockedhash'),
+  compare: jest.fn().mockResolvedValue(true),
+}));
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -23,7 +29,7 @@ const mockUsersService = () => ({
 
 describe('AdminService', () => {
   let service: AdminService;
-  let reportRepo: any;
+  let reportRepo: { findAndCount: jest.Mock; findOne: jest.Mock; save: jest.Mock };
   let usersService: jest.Mocked<UsersService>;
 
   beforeEach(async () => {

@@ -6,7 +6,7 @@
 
 import 'reflect-metadata';
 import * as crypto from 'crypto';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { Client } from 'pg';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -266,8 +266,8 @@ async function main() {
       );
       inserted++;
       console.log(`  ➕  ${r.contactType} ${r.contact} [${r.flags.join(', ')}]`);
-    } catch (err: any) {
-      if (err.code === '23505') {
+    } catch (err: unknown) {
+      if ((err as { code?: string }).code === '23505') {
         skipped++;
         console.log(`  ⏭️   Duplicado, pulando: ${r.contact}`);
       } else {

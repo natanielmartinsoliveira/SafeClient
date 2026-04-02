@@ -11,9 +11,7 @@ export const metadata: Metadata = {
 
 function decodeToken(token: string): { email: string | null; role: string | null } {
   try {
-    const payload = JSON.parse(
-      Buffer.from(token.split('.')[1], 'base64url').toString(),
-    );
+    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString());
     return { email: payload.email ?? null, role: payload.role ?? null };
   } catch {
     return { email: null, role: null };

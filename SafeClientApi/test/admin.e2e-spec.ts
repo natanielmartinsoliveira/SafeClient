@@ -2,11 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
+import { AdminService } from '../src/admin/admin.service';
 
 /**
  * E2E tests for Admin endpoints.
- * Requires a running PostgreSQL instance with the admin seed user:
- *   email: admin@safeclient.com  password: Admin@123456
+ * Requires a running PostgreSQL instance.
+ * The admin user is created automatically in beforeAll if it does not exist.
  *
  * Run with: npm run test:e2e
  */
@@ -27,6 +28,12 @@ describe('Admin (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
     await app.init();
 
+    // Ensure admin user exists (idempotent — ignores ConflictException)
+    const adminService = moduleFixture.get(AdminService);
+    await adminService
+      .createUser({ email: adminEmail, password: adminPassword, role: 'admin' })
+      .catch(() => {});
+
     // Get admin token
     const adminLogin = await request(app.getHttpServer())
       .post('/auth/login')
@@ -41,7 +48,7 @@ describe('Admin (e2e)', () => {
       .post('/auth/login')
       .send({ email: testUserEmail, password: 'TestSenha@123' });
     userToken = userLogin.body.access_token;
-  });
+  }, 30000);
 
   afterAll(async () => {
     await app.close();
@@ -105,7 +112,7 @@ describe('Admin (e2e)', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .expect(200)
         .expect((res) => {
-          const reports = res.body.data as any[];
+          const reports = res.body.data as Array<{ active: boolean }>;
           reports.forEach((r) => expect(r.active).toBe(true));
         });
     });

@@ -3,7 +3,12 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-RUN npm run build
+RUN npm run build \
+  && echo "✔ dist/main.js ok" \
+  && ls dist/main.js \
+  && npx tsc -p tsconfig.seed.json \
+  && echo "✔ dist/database/seed.js ok" \
+  && ls dist/database/seed.js
 
 FROM node:20-alpine
 WORKDIR /usr/src/app

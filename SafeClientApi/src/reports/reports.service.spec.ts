@@ -4,7 +4,7 @@ process.env.CONTACT_HASH_SECRET = 'test-secret-for-unit-tests';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConflictException } from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { ReportsService } from './reports.service';
 import { Report } from './report.entity';
 import { ContactType } from '../common/enums/contact-type.enum';
@@ -45,7 +45,7 @@ describe('ReportsService', () => {
 
     it('should create a report and return id and createdAt', async () => {
       repo.findOne.mockResolvedValue(null);
-      repo.update.mockResolvedValue({ affected: 0 } as any);
+      repo.update.mockResolvedValue({ affected: 0, raw: [], generatedMaps: [] } as UpdateResult);
       const saved = { id: 'uuid-1', createdAt: new Date() } as Report;
       repo.create.mockReturnValue(saved);
       repo.save.mockResolvedValue(saved);
@@ -65,7 +65,7 @@ describe('ReportsService', () => {
 
     it('should attach userId and userEmail when provided', async () => {
       repo.findOne.mockResolvedValue(null);
-      repo.update.mockResolvedValue({ affected: 0 } as any);
+      repo.update.mockResolvedValue({ affected: 0, raw: [], generatedMaps: [] } as UpdateResult);
       const saved = { id: 'uuid-2', createdAt: new Date() } as Report;
       repo.create.mockReturnValue(saved);
       repo.save.mockResolvedValue(saved);
@@ -93,7 +93,7 @@ describe('ReportsService', () => {
 
   describe('deactivateByContactHash', () => {
     it('should soft-delete all active reports for a contact', async () => {
-      repo.update.mockResolvedValue({ affected: 3 } as any);
+      repo.update.mockResolvedValue({ affected: 3, raw: [], generatedMaps: [] } as UpdateResult);
 
       await service.deactivateByContactHash('hash123', ContactType.PHONE);
       expect(repo.update).toHaveBeenCalledWith(

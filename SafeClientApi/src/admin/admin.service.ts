@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { FindOptionsWhere, Repository } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 import { Report } from '../reports/report.entity';
 import { UsersService } from '../users/users.service';
 import { UpdateReportDto } from './dto/update-report.dto';
@@ -20,9 +20,9 @@ export class AdminService {
   // ── Reports ──────────────────────────────────────────────────────────────
 
   async listReports(page = 1, limit = 20, active?: boolean, contactType?: ContactType) {
-    const where: FindManyOptions<Report>['where'] = {};
-    if (active !== undefined) (where as any).active = active;
-    if (contactType) (where as any).contactType = contactType;
+    const where: FindOptionsWhere<Report> = {};
+    if (active !== undefined) where.active = active;
+    if (contactType) where.contactType = contactType;
 
     const [data, total] = await this.reportRepo.findAndCount({
       where,

@@ -1,7 +1,14 @@
+// Mock bcrypt before any imports to avoid native binary SIGSEGV in WSL/Jest
+jest.mock('bcryptjs', () => ({
+  hash: jest.fn().mockResolvedValue('$2b$10$mockedhash'),
+  compare: jest.fn().mockImplementation((plain: string) =>
+    Promise.resolve(plain === 'senha1234'),
+  ),
+}));
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/user.entity';
@@ -53,8 +60,7 @@ describe('AuthService', () => {
 
   describe('login', () => {
     it('should return access_token and email on valid credentials', async () => {
-      const hash = await bcrypt.hash('senha1234', 10);
-      const user = { id: '1', email: 'a@b.com', passwordHash: hash, role: 'user' } as User;
+      const user = { id: '1', email: 'a@b.com', passwordHash: '$2b$10$mockedhash', role: 'user' } as User;
       usersService.findByEmail.mockResolvedValue(user);
 
       const result = await service.login({ email: 'a@b.com', password: 'senha1234' });
@@ -69,8 +75,7 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException on wrong password', async () => {
-      const hash = await bcrypt.hash('senha1234', 10);
-      const user = { id: '1', email: 'a@b.com', passwordHash: hash, role: 'user' } as User;
+      const user = { id: '1', email: 'a@b.com', passwordHash: '$2b$10$mockedhash', role: 'user' } as User;
       usersService.findByEmail.mockResolvedValue(user);
 
       await expect(service.login({ email: 'a@b.com', password: 'wrongpass' }))
