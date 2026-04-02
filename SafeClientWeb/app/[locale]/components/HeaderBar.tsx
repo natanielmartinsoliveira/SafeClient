@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import LocaleSwitcher from './LocaleSwitcher';
 
 interface Props {
   userEmail: string | null;
@@ -9,6 +11,7 @@ interface Props {
 }
 
 export default function HeaderBar({ userEmail, userRole }: Props) {
+  const t = useTranslations('Header');
   const pathname = usePathname();
   const router = useRouter();
 
@@ -17,10 +20,9 @@ export default function HeaderBar({ userEmail, userRole }: Props) {
   const isCadastro = pathname === '/cadastro';
   const isRelato = pathname === '/relato';
 
-  // Na página de resultado o header se integra ao fundo roxo
   const purple = isResultado;
-  const bg = purple ? 'rgba(255,255,255,0.13)' : '#FFFFFF';
-  const border = purple ? '1px solid rgba(255,255,255,0.2)' : '1px solid #E8E0F8';
+  const bg = purple ? '#7B52B8' : '#FFFFFF';
+  const border = purple ? 'none' : '1px solid #E8E0F8';
 
   async function handleLogout() {
     await fetch('/api/auth/logout', { method: 'POST' });
@@ -36,40 +38,41 @@ export default function HeaderBar({ userEmail, userRole }: Props) {
       {/* Logo */}
       <Link href="/">
         <img
-          src="/logo.png"
+          src={purple ? '/logo_branco.png' : '/logo.png'}
           alt="SafeClient"
           className="h-8 w-auto"
-          style={purple ? { filter: 'brightness(0) invert(1)' } : undefined}
         />
       </Link>
 
-      {/* Auth */}
+      {/* Right side */}
       <div className="flex items-center gap-3">
+        {/* Locale switcher */}
+        <div style={{ color: purple ? 'rgba(255,255,255,0.85)' : '#7B52B8' }}>
+          <LocaleSwitcher />
+        </div>
+
         {userEmail ? (
           <>
-            {/* Postar Relato — aparece em todas menos na própria página /relato */}
             {!isRelato && (
               <Link
                 href="/relato"
                 className="text-sm font-bold px-5 py-1.5 rounded-full text-white transition-opacity hover:opacity-90"
                 style={{ background: 'linear-gradient(135deg, #8B6FC4 0%, #5C3D9E 100%)' }}
               >
-                + Postar Relato
+                {t('postReport')}
               </Link>
             )}
 
-            {/* Admin badge */}
             {userRole === 'admin' && (
               <Link
                 href="/admin"
                 className="text-xs font-bold px-2.5 py-1 rounded-full"
                 style={{ background: '#FEF3C7', color: '#92400E', border: '1px solid #FDE68A' }}
               >
-                Admin
+                {t('admin')}
               </Link>
             )}
 
-            {/* Avatar */}
             <div
               className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0 cursor-default"
               style={{ background: 'linear-gradient(135deg, #8B6FC4, #5C3D9E)' }}
@@ -78,7 +81,6 @@ export default function HeaderBar({ userEmail, userRole }: Props) {
               {userEmail[0].toUpperCase()}
             </div>
 
-            {/* Sair */}
             <button
               onClick={handleLogout}
               className="text-sm font-medium px-4 py-1.5 rounded-full transition-colors hover:opacity-80"
@@ -88,7 +90,7 @@ export default function HeaderBar({ userEmail, userRole }: Props) {
                   : { color: '#7B52B8', border: '1px solid #D4C8F0' }
               }
             >
-              Sair
+              {t('logout')}
             </button>
           </>
         ) : isLogin ? (
@@ -97,7 +99,7 @@ export default function HeaderBar({ userEmail, userRole }: Props) {
             className="text-sm font-bold px-5 py-1.5 rounded-full text-white"
             style={{ background: 'linear-gradient(135deg, #8B6FC4 0%, #5C3D9E 100%)' }}
           >
-            Cadastre-se
+            {t('register')}
           </Link>
         ) : isCadastro ? (
           <Link
@@ -105,23 +107,27 @@ export default function HeaderBar({ userEmail, userRole }: Props) {
             className="text-sm font-medium px-4 py-1.5 rounded-full transition-colors hover:bg-purple-50"
             style={{ color: '#7B52B8', border: '1px solid #D4C8F0' }}
           >
-            Entrar
+            {t('login')}
           </Link>
         ) : (
           <>
             <Link
               href="/login"
-              className="text-sm font-medium px-4 py-1.5 rounded-full transition-colors hover:bg-purple-50"
-              style={{ color: '#7B52B8', border: '1px solid #D4C8F0' }}
+              className="text-sm font-medium px-4 py-1.5 rounded-full transition-colors hover:opacity-80"
+              style={
+                purple
+                  ? { color: 'rgba(255,255,255,0.85)', border: '1px solid rgba(255,255,255,0.35)' }
+                  : { color: '#7B52B8', border: '1px solid #D4C8F0' }
+              }
             >
-              Entrar
+              {t('login')}
             </Link>
             <Link
               href="/cadastro"
               className="text-sm font-bold px-5 py-1.5 rounded-full text-white transition-opacity hover:opacity-90"
               style={{ background: 'linear-gradient(135deg, #8B6FC4 0%, #5C3D9E 100%)' }}
             >
-              Cadastre-se
+              {t('register')}
             </Link>
           </>
         )}

@@ -1,0 +1,100 @@
+{
+  "Header": {
+    "postReport": "+ Publicar Reporte",
+    "admin": "Admin",
+    "logout": "Salir",
+    "register": "Registrarse",
+    "login": "Iniciar sesión"
+  },
+  "Search": {
+    "subtitle": "Consulta reportes de la comunidad",
+    "typePhone": "Teléfono",
+    "typeTelegram": "Telegram",
+    "typeInstagram": "Instagram",
+    "typeEmail": "Email",
+    "phonePlaceholder": "(47) 99999-9999",
+    "telegramPlaceholder": "@usuario",
+    "instagramPlaceholder": "@perfil",
+    "emailPlaceholder": "email@ejemplo.com",
+    "analyze": "🔍\u00a0 Analizar",
+    "privacy": "🔒 Consultas anónimas · Datos protegidos",
+    "footer": "SafeClient · Protección y seguridad para profesionales"
+  },
+  "Login": {
+    "title": "Iniciar sesión",
+    "subtitle": "Accede a tu cuenta SafeClient",
+    "emailLabel": "Correo electrónico",
+    "passwordLabel": "Contraseña",
+    "submit": "Iniciar sesión",
+    "loading": "Iniciando sesión...",
+    "noAccount": "¿No tienes cuenta?",
+    "createLink": "Crear cuenta",
+    "errorInvalid": "Credenciales inválidas.",
+    "errorConnection": "Error de conexión. Inténtalo de nuevo."
+  },
+  "Register": {
+    "title": "Crear cuenta",
+    "subtitle": "Únete a la comunidad SafeClient",
+    "emailLabel": "Correo electrónico",
+    "passwordLabel": "Contraseña",
+    "confirmLabel": "Confirmar contraseña",
+    "passwordPlaceholder": "mín. 8 caracteres",
+    "confirmPlaceholder": "repite la contraseña",
+    "submit": "Crear cuenta",
+    "loading": "Creando cuenta...",
+    "errorMismatch": "Las contraseñas no coinciden.",
+    "errorTooShort": "La contraseña debe tener al menos 8 caracteres.",
+    "errorDefault": "Error al crear la cuenta.",
+    "errorConnection": "Error de conexión. Inténtalo de nuevo.",
+    "hasAccount": "¿Ya tienes cuenta?",
+    "loginLink": "Iniciar sesión",
+    "terms": "Al crear una cuenta aceptas nuestros términos de uso."
+  },
+  "Resultado": {
+    "title": "Resultado del Análisis",
+    "retry": "Intentar de nuevo",
+    "newSearch": "← Nueva consulta",
+    "noReports": "No se encontraron reportes",
+    "noReportsDesc1": "Este contacto no tiene ocurrencias registradas.",
+    "noReportsDesc2": "Si tuviste una experiencia negativa, usa la app para reportar.",
+    "recommendations": "Recomendaciones",
+    "warningOne": "advertencia registrada",
+    "warningMany": "advertencias registradas",
+    "riskHigh": "Alto Riesgo",
+    "riskMedium": "Riesgo Medio",
+    "riskLow": "Bajo Riesgo"
+  },
+  "Relato": {
+    "title": "Nuevo Reporte",
+    "subtitle": "Tu reporte quedará vinculado a tu cuenta para garantizar responsabilidad.",
+    "postingAs": "Publicando como",
+    "contactTypeLabel": "Tipo de contacto",
+    "contactLabel": "Contacto",
+    "occurrenceLabel": "Tipo de ocurrencia",
+    "descLabel": "Descripción",
+    "descOptional": "(opcional)",
+    "descPlaceholder": "Describe lo que pasó...",
+    "warningText": "Este reporte quedará vinculado a tu cuenta. Los reportes falsos o calumniosos pueden resultar en responsabilidad civil.",
+    "submit": "📢 Publicar Reporte",
+    "loading": "Enviando...",
+    "errorNoFlag": "Selecciona al menos un tipo de ocurrencia.",
+    "errorDefault": "Error al enviar el reporte.",
+    "errorConnection": "Error de conexión. Inténtalo de nuevo.",
+    "successTitle": "¡Reporte enviado!",
+    "successMessage": "Gracias por tu contribución. Juntas nos protegemos. ♥",
+    "backHome": "Volver al inicio"
+  },
+  "Flags": {
+    "tentativa_golpe": "Intento de Estafa",
+    "comportamento_agressivo": "Comportamiento Agresivo",
+    "nao_compareceu": "No se presentó",
+    "perda_de_tempo": "Pérdida de Tiempo",
+    "pagamento_recusado": "Pago Rechazado",
+    "pressao_sem_camisinha": "Presión sin condón"
+  },
+  "LocaleSwitcher": {
+    "pt": "Português",
+    "en": "English",
+    "es": "Español"
+  }
+}

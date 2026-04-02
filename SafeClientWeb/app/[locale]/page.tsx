@@ -1,6 +1,5 @@
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-import RelatoPage from '../components/RelatoPage';
+import SearchPage from './components/SearchPage';
 
 function decodeEmail(token: string): string | null {
   try {
@@ -11,12 +10,9 @@ function decodeEmail(token: string): string | null {
   }
 }
 
-export default async function RelatoRoute() {
+export default async function HomePage() {
   const store = await cookies();
   const token = store.get('safeclient_token')?.value;
-
-  if (!token) redirect('/login');
-
-  const email = decodeEmail(token);
-  return <RelatoPage userEmail={email ?? ''} />;
+  const email = token ? decodeEmail(token) : null;
+  return <SearchPage userEmail={email} />;
 }

@@ -1,4 +1,8 @@
+import createMiddleware from 'next-intl/middleware';
+import { routing } from './i18n/routing';
 import { NextRequest, NextResponse } from 'next/server';
+
+const intlMiddleware = createMiddleware(routing);
 
 function decodePayload(token: string): Record<string, unknown> | null {
   try {
@@ -25,9 +29,9 @@ export function middleware(req: NextRequest) {
     if (payload?.role !== 'admin') return NextResponse.redirect(new URL('/', req.url));
   }
 
-  return NextResponse.next();
+  return intlMiddleware(req);
 }
 
 export const config = {
-  matcher: ['/login', '/cadastro', '/admin/:path*'],
+  matcher: ['/((?!api|_next|.*\\..*).*)'],
 };

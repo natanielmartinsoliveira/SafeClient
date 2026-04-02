@@ -1,0 +1,100 @@
+{
+  "Header": {
+    "postReport": "+ Post Report",
+    "admin": "Admin",
+    "logout": "Sign out",
+    "register": "Sign up",
+    "login": "Sign in"
+  },
+  "Search": {
+    "subtitle": "Browse community reports",
+    "typePhone": "Phone",
+    "typeTelegram": "Telegram",
+    "typeInstagram": "Instagram",
+    "typeEmail": "Email",
+    "phonePlaceholder": "(47) 99999-9999",
+    "telegramPlaceholder": "@username",
+    "instagramPlaceholder": "@profile",
+    "emailPlaceholder": "email@example.com",
+    "analyze": "🔍\u00a0 Analyze",
+    "privacy": "🔒 Anonymous queries · Data protected",
+    "footer": "SafeClient · Protection and safety for professionals"
+  },
+  "Login": {
+    "title": "Sign in",
+    "subtitle": "Access your SafeClient account",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "submit": "Sign in",
+    "loading": "Signing in...",
+    "noAccount": "No account?",
+    "createLink": "Create account",
+    "errorInvalid": "Invalid credentials.",
+    "errorConnection": "Connection error. Please try again."
+  },
+  "Register": {
+    "title": "Create account",
+    "subtitle": "Join the SafeClient community",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "confirmLabel": "Confirm password",
+    "passwordPlaceholder": "min. 8 characters",
+    "confirmPlaceholder": "repeat password",
+    "submit": "Create account",
+    "loading": "Creating account...",
+    "errorMismatch": "Passwords do not match.",
+    "errorTooShort": "Password must be at least 8 characters.",
+    "errorDefault": "Error creating account.",
+    "errorConnection": "Connection error. Please try again.",
+    "hasAccount": "Already have an account?",
+    "loginLink": "Sign in",
+    "terms": "By creating an account you agree to our terms of use."
+  },
+  "Resultado": {
+    "title": "Analysis Result",
+    "retry": "Try again",
+    "newSearch": "← New search",
+    "noReports": "No reports found",
+    "noReportsDesc1": "This contact has no registered occurrences.",
+    "noReportsDesc2": "If you had a negative experience, use the app to report it.",
+    "recommendations": "Recommendations",
+    "warningOne": "warning registered",
+    "warningMany": "warnings registered",
+    "riskHigh": "High Risk",
+    "riskMedium": "Medium Risk",
+    "riskLow": "Low Risk"
+  },
+  "Relato": {
+    "title": "New Report",
+    "subtitle": "Your report will be linked to your account to ensure accountability.",
+    "postingAs": "Posting as",
+    "contactTypeLabel": "Contact type",
+    "contactLabel": "Contact",
+    "occurrenceLabel": "Occurrence type",
+    "descLabel": "Description",
+    "descOptional": "(optional)",
+    "descPlaceholder": "Describe what happened...",
+    "warningText": "This report will be linked to your account. False or defamatory reports may result in civil liability.",
+    "submit": "📢 Publish Report",
+    "loading": "Sending...",
+    "errorNoFlag": "Select at least one occurrence type.",
+    "errorDefault": "Error sending report.",
+    "errorConnection": "Connection error. Please try again.",
+    "successTitle": "Report submitted!",
+    "successMessage": "Thank you for your contribution. Together we protect each other. ♥",
+    "backHome": "Back to home"
+  },
+  "Flags": {
+    "tentativa_golpe": "Scam Attempt",
+    "comportamento_agressivo": "Aggressive Behavior",
+    "nao_compareceu": "No Show",
+    "perda_de_tempo": "Time Waster",
+    "pagamento_recusado": "Refused Payment",
+    "pressao_sem_camisinha": "Condom Pressure"
+  },
+  "LocaleSwitcher": {
+    "pt": "Português",
+    "en": "English",
+    "es": "Español"
+  }
+}

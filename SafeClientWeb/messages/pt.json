@@ -1,0 +1,100 @@
+{
+  "Header": {
+    "postReport": "+ Postar Relato",
+    "admin": "Admin",
+    "logout": "Sair",
+    "register": "Cadastre-se",
+    "login": "Entrar"
+  },
+  "Search": {
+    "subtitle": "Consulte relatos da comunidade",
+    "typePhone": "Telefone",
+    "typeTelegram": "Telegram",
+    "typeInstagram": "Instagram",
+    "typeEmail": "E-mail",
+    "phonePlaceholder": "(47) 99999-9999",
+    "telegramPlaceholder": "@usuário",
+    "instagramPlaceholder": "@perfil",
+    "emailPlaceholder": "email@exemplo.com",
+    "analyze": "🔍\u00a0 Analisar",
+    "privacy": "🔒 Consultas anônimas · Dados protegidos pela LGPD",
+    "footer": "SafeClient · Proteção e segurança para profissionais"
+  },
+  "Login": {
+    "title": "Entrar",
+    "subtitle": "Acesse sua conta SafeClient",
+    "emailLabel": "E-mail",
+    "passwordLabel": "Senha",
+    "submit": "Entrar",
+    "loading": "Entrando...",
+    "noAccount": "Não tem conta?",
+    "createLink": "Criar conta",
+    "errorInvalid": "Credenciais inválidas.",
+    "errorConnection": "Erro de conexão. Tente novamente."
+  },
+  "Register": {
+    "title": "Criar conta",
+    "subtitle": "Junte-se à comunidade SafeClient",
+    "emailLabel": "E-mail",
+    "passwordLabel": "Senha",
+    "confirmLabel": "Confirmar senha",
+    "passwordPlaceholder": "mín. 8 caracteres",
+    "confirmPlaceholder": "repita a senha",
+    "submit": "Criar conta",
+    "loading": "Criando conta...",
+    "errorMismatch": "As senhas não coincidem.",
+    "errorTooShort": "A senha deve ter ao menos 8 caracteres.",
+    "errorDefault": "Erro ao criar conta.",
+    "errorConnection": "Erro de conexão. Tente novamente.",
+    "hasAccount": "Já tem conta?",
+    "loginLink": "Entrar",
+    "terms": "Ao criar uma conta você concorda com nossos termos de uso e LGPD."
+  },
+  "Resultado": {
+    "title": "Resultado da Análise",
+    "retry": "Tentar novamente",
+    "newSearch": "← Nova consulta",
+    "noReports": "Nenhum relato encontrado",
+    "noReportsDesc1": "Este contato não possui ocorrências registradas.",
+    "noReportsDesc2": "Se tiver uma experiência negativa, use o app para registrar.",
+    "recommendations": "Recomendações",
+    "warningOne": "advertência registrada",
+    "warningMany": "advertências registradas",
+    "riskHigh": "Alto Risco",
+    "riskMedium": "Risco Médio",
+    "riskLow": "Baixo Risco"
+  },
+  "Relato": {
+    "title": "Novo Relato",
+    "subtitle": "Seu relato ficará vinculado à sua conta para garantir responsabilidade.",
+    "postingAs": "Postando como",
+    "contactTypeLabel": "Tipo de contato",
+    "contactLabel": "Contato",
+    "occurrenceLabel": "Tipo de ocorrência",
+    "descLabel": "Descrição",
+    "descOptional": "(opcional)",
+    "descPlaceholder": "Descreva o que aconteceu...",
+    "warningText": "Este relato ficará vinculado à sua conta. Relatos falsos ou caluniosos podem resultar em responsabilização civil.",
+    "submit": "📢 Publicar Relato",
+    "loading": "Enviando...",
+    "errorNoFlag": "Selecione ao menos um tipo de ocorrência.",
+    "errorDefault": "Erro ao enviar relato.",
+    "errorConnection": "Erro de conexão. Tente novamente.",
+    "successTitle": "Relato enviado!",
+    "successMessage": "Agradecemos a sua contribuição. Unidas vamos proteger todas nós. ♥",
+    "backHome": "Voltar ao início"
+  },
+  "Flags": {
+    "tentativa_golpe": "Tentativa de Golpe",
+    "comportamento_agressivo": "Comportamento Agressivo",
+    "nao_compareceu": "Não Compareceu",
+    "perda_de_tempo": "Perda de Tempo",
+    "pagamento_recusado": "Pagamento Recusado",
+    "pressao_sem_camisinha": "Pressão Sem Camisinha"
+  },
+  "LocaleSwitcher": {
+    "pt": "Português",
+    "en": "English",
+    "es": "Español"
+  }
+}
