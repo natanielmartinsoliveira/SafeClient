@@ -11,6 +11,7 @@ RUN npm run build \
   && ls dist/database/seed.js
 
 FROM node:20-alpine
+RUN apk add --no-cache netcat-openbsd
 WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app/dist ./dist
 COPY package*.json ./
