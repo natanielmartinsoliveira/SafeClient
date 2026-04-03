@@ -14,7 +14,7 @@
     "typeTelegram": "Telegram",
     "typeInstagram": "Instagram",
     "typeEmail": "E-mail",
-    "phonePlaceholder": "(47) 99999-9999",
+    "phonePlaceholder": "+55 47 99999-9999",
     "telegramPlaceholder": "@usuário",
     "instagramPlaceholder": "@perfil",
     "emailPlaceholder": "email@exemplo.com",
@@ -26,7 +26,7 @@
     "privacyBullet3": "Sistema baseado em hash",
     "socialProof": "+2.300 relatos enviados este mês",
     "footer": "SafeClient · Proteção e segurança para profissionais",
-    "errorPhone": "Telefone inválido. Informe DDD + número (10 ou 11 dígitos).",
+    "errorPhone": "Telefone inválido. Use formato internacional, ex: +55 47 99999-9999.",
     "errorHandle": "Nome de usuário inválido (só letras, números, pontos e underscores).",
     "errorEmail": "E-mail inválido."
   },

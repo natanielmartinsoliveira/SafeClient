@@ -12,8 +12,10 @@ interface Props {
 
 function validateContact(contact: string, type: ContactType): boolean {
   switch (type) {
-    case 'phone':
-      return /^\d{10,11}$/.test(contact.replace(/\D/g, ''));
+    case 'phone': {
+      const digits = contact.replace(/[\s\-().+]/g, '');
+      return /^\d{7,15}$/.test(digits);
+    }
     case 'telegram':
     case 'instagram':
       return /^[a-zA-Z0-9._]{1,50}$/.test(contact.trim());
