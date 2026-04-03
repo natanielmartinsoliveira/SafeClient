@@ -92,6 +92,13 @@ export class AdminController {
     return this.adminService.deleteUser(id);
   }
 
+  // ── Cron manual trigger ───────────────────────────────────────────────────
+
+  @Post('cron/run')
+  runCron() {
+    return this.adminService.runCron();
+  }
+
   // ── Stats ─────────────────────────────────────────────────────────────────
 
   @Get('stats')
@@ -100,9 +107,7 @@ export class AdminController {
       this.adminService.listReports(1, 1),
       this.adminService.listUsers(1, 1),
     ]);
-    const [activeReports] = await Promise.all([
-      this.adminService.listReports(1, 1, true),
-    ]);
+    const [activeReports] = await Promise.all([this.adminService.listReports(1, 1, true)]);
     return {
       totalReports: reports.total,
       activeReports: activeReports.total,

@@ -11,6 +11,7 @@ interface Report {
   active: boolean;
   userEmail: string | null;
   createdAt: string;
+  hasPendingRemoval: boolean;
 }
 
 const FLAG_LABELS: Record<string, string> = {
@@ -28,6 +29,8 @@ export default function AdminReportsPage() {
   const [page, setPage] = useState(1);
   const [activeFilter, setActiveFilter] = useState<string>('');
   const [loading, setLoading] = useState(true);
+  const [cronLoading, setCronLoading] = useState(false);
+  const [cronMsg, setCronMsg] = useState('');
   const limit = 20;
 
   const load = useCallback(async () => {
@@ -47,6 +50,20 @@ export default function AdminReportsPage() {
     load();
   }, [load]);
 
+  async function runCron() {
+    setCronLoading(true);
+    setCronMsg('');
+    const res = await fetch('/api/admin/cron', { method: 'POST' });
+    const data = await res.json().catch(() => ({}));
+    setCronMsg(
+      res.ok
+        ? `✅ Cron executado — ${data.processed ?? 0} remoção(ões) processada(s).`
+        : '❌ Erro ao executar cron.',
+    );
+    setCronLoading(false);
+    load();
+  }
+
   async function softDelete(id: string) {
     if (!confirm('Desativar este relato?')) return;
     await fetch(`/api/admin/reports/${id}`, { method: 'DELETE' });
@@ -57,27 +74,46 @@ export default function AdminReportsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <h1 className="text-2xl font-black" style={{ color: '#2E1B6E' }}>
           Relatos{' '}
           <span className="text-base font-normal" style={{ color: '#9887B8' }}>
             ({total})
           </span>
         </h1>
-        <select
-          value={activeFilter}
-          onChange={(e) => {
-            setActiveFilter(e.target.value);
-            setPage(1);
-          }}
-          className="text-sm px-3 py-2 rounded-xl outline-none"
-          style={{ border: '1.5px solid #E0D8F4', background: '#F0ECFF', color: '#2E1B6E' }}
-        >
-          <option value="">Todos</option>
-          <option value="true">Ativos</option>
-          <option value="false">Inativos</option>
-        </select>
+        <div className="flex items-center gap-3 flex-wrap">
+          <button
+            onClick={runCron}
+            disabled={cronLoading}
+            className="text-sm px-4 py-2 rounded-xl font-semibold disabled:opacity-50"
+            style={{ background: '#5C3D9E', color: '#FFFFFF' }}
+          >
+            {cronLoading ? '⏳ Executando...' : '⚡ Executar Cron Agora'}
+          </button>
+          <select
+            value={activeFilter}
+            onChange={(e) => {
+              setActiveFilter(e.target.value);
+              setPage(1);
+            }}
+            className="text-sm px-3 py-2 rounded-xl outline-none"
+            style={{ border: '1.5px solid #E0D8F4', background: '#F0ECFF', color: '#2E1B6E' }}
+          >
+            <option value="">Todos</option>
+            <option value="true">Ativos</option>
+            <option value="false">Inativos</option>
+          </select>
+        </div>
       </div>
+
+      {cronMsg && (
+        <p
+          className="text-sm px-4 py-2 rounded-xl"
+          style={{ background: '#F0ECFF', color: '#5C3D9E' }}
+        >
+          {cronMsg}
+        </p>
+      )}
 
       <div className="rounded-2xl overflow-hidden" style={{ border: '1.5px solid #E0D8F4' }}>
         <table className="w-full text-sm" style={{ background: '#FFFFFF' }}>
@@ -96,6 +132,9 @@ export default function AdminReportsPage() {
                 Status
               </th>
               <th className="text-left px-4 py-3 font-semibold" style={{ color: '#6B5B9E' }}>
+                Remoção
+              </th>
+              <th className="text-left px-4 py-3 font-semibold" style={{ color: '#6B5B9E' }}>
                 Data
               </th>
               <th className="px-4 py-3" />
@@ -104,13 +143,13 @@ export default function AdminReportsPage() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={6} className="text-center py-8" style={{ color: '#9887B8' }}>
+                <td colSpan={7} className="text-center py-8" style={{ color: '#9887B8' }}>
                   Carregando...
                 </td>
               </tr>
             ) : reports.length === 0 ? (
               <tr>
-                <td colSpan={6} className="text-center py-8" style={{ color: '#9887B8' }}>
+                <td colSpan={7} className="text-center py-8" style={{ color: '#9887B8' }}>
                   Nenhum relato encontrado.
                 </td>
               </tr>
@@ -147,6 +186,20 @@ export default function AdminReportsPage() {
                     >
                       {r.active ? 'Ativo' : 'Inativo'}
                     </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    {r.hasPendingRemoval ? (
+                      <span
+                        className="text-xs px-2 py-0.5 rounded-full font-semibold"
+                        style={{ background: '#FEF3C7', color: '#D97706' }}
+                      >
+                        🗑️ Pendente
+                      </span>
+                    ) : (
+                      <span className="text-xs" style={{ color: '#C4B5D8' }}>
+                        —
+                      </span>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-xs" style={{ color: '#9887B8' }}>
                     {new Date(r.createdAt).toLocaleDateString('pt-BR')}

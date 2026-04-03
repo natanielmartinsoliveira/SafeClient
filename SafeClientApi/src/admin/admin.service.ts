@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { FindOptionsWhere, In, Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Report } from '../reports/report.entity';
+import { RemovalRequest } from '../removal-requests/removal-request.entity';
 import { UsersService } from '../users/users.service';
+import { RemovalCronService } from '../cron/removal-cron.service';
 import { UpdateReportDto } from './dto/update-report.dto';
 import { AdminCreateUserDto } from './dto/admin-create-user.dto';
 import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
@@ -14,7 +16,10 @@ export class AdminService {
   constructor(
     @InjectRepository(Report)
     private readonly reportRepo: Repository<Report>,
+    @InjectRepository(RemovalRequest)
+    private readonly removalRepo: Repository<RemovalRequest>,
     private readonly usersService: UsersService,
+    private readonly cronService: RemovalCronService,
   ) {}
 
   // ── Reports ──────────────────────────────────────────────────────────────
@@ -30,7 +35,30 @@ export class AdminService {
       skip: (page - 1) * limit,
       take: limit,
     });
-    return { data, total, page, limit };
+
+    // Verifica quais contactHashes possuem remoção pendente
+    const hashes = data.map((r) => r.contactHash);
+    const pendingRemovals =
+      hashes.length > 0
+        ? await this.removalRepo.find({
+            where: { contactHash: In(hashes), status: 'pending' },
+          })
+        : [];
+    const pendingSet = new Set(pendingRemovals.map((p) => `${p.contactHash}:${p.contactType}`));
+
+    const enriched = data.map((r) => ({
+      ...r,
+      hasPendingRemoval: pendingSet.has(`${r.contactHash}:${r.contactType}`),
+    }));
+
+    return { data: enriched, total, page, limit };
+  }
+
+  async runCron(): Promise<{ processed: number }> {
+    const before = await this.removalRepo.count({ where: { status: 'pending' } });
+    await this.cronService.processRemovalRequests();
+    const after = await this.removalRepo.count({ where: { status: 'pending' } });
+    return { processed: before - after };
   }
 
   async getReport(id: string) {
