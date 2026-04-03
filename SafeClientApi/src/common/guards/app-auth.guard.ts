@@ -27,11 +27,13 @@ export class AppAuthGuard implements CanActivate {
     // Em desenvolvimento, bypassa HMAC para facilitar testes via Swagger/curl
     if (process.env.NODE_ENV !== 'production') return true;
 
-    // Rotas públicas (sem HMAC): auth + web + admin (protegidas por JWT no controller)
+    // Rotas públicas (sem HMAC): auth + web + admin + consulta + remoção
     if (
       req.path.startsWith('/auth/') ||
       req.path.startsWith('/web/') ||
-      req.path.startsWith('/admin/')
+      req.path.startsWith('/admin/') ||
+      req.path.startsWith('/contacts/') ||
+      req.path.startsWith('/removal-requests')
     )
       return true;
 
