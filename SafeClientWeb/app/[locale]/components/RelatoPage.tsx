@@ -83,18 +83,9 @@ export default function RelatoPage({ userEmail }: Props) {
 
   const currentType = TYPES.find((tp) => tp.value === contactType)!;
 
-  function formatPhone(v: string) {
-    const d = v.replace(/\D/g, '').slice(0, 11);
-    if (d.length <= 2) return d;
-    if (d.length <= 7) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
-    return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
-  }
-
   function handleContactChange(v: string) {
     setContactError('');
-    if (contactType === 'phone') setContact(formatPhone(v));
-    else if (contactType === 'telegram' || contactType === 'instagram')
-      setContact(v.replace(/^@+/, ''));
+    if (contactType === 'telegram' || contactType === 'instagram') setContact(v.replace(/^@+/, ''));
     else setContact(v);
   }
 
