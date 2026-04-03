@@ -8,6 +8,8 @@
   },
   "Search": {
     "subtitle": "Evite golpes e clientes inseguros com relatos da comunidade",
+    "poweredBy": "Impulsionado por relatos anônimos da comunidade",
+    "analyzeHint": "Veja nível de risco, alertas e recomendações de segurança",
     "typePhone": "Telefone",
     "typeTelegram": "Telegram",
     "typeInstagram": "Instagram",
@@ -18,7 +20,15 @@
     "emailPlaceholder": "email@exemplo.com",
     "analyze": "🔍\u00a0 Analisar",
     "privacy": "🔒 Consultas anônimas · Dados protegidos pela LGPD",
-    "footer": "SafeClient · Proteção e segurança para profissionais"
+    "privacyTitle": "🔒 Seus dados estão protegidos",
+    "privacyBullet1": "Consulta anonimizada",
+    "privacyBullet2": "Nenhum dado pessoal armazenado",
+    "privacyBullet3": "Sistema baseado em hash",
+    "socialProof": "+2.300 relatos enviados este mês",
+    "footer": "SafeClient · Proteção e segurança para profissionais",
+    "errorPhone": "Telefone inválido. Informe DDD + número (10 ou 11 dígitos).",
+    "errorHandle": "Nome de usuário inválido (só letras, números, pontos e underscores).",
+    "errorEmail": "E-mail inválido."
   },
   "Login": {
     "title": "Entrar",

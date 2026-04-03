@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { Report } from './reports/report.entity';
 import { RemovalRequest } from './removal-requests/removal-request.entity';
 import { User } from './users/user.entity';
@@ -17,6 +19,10 @@ import { AdminModule } from './admin/admin.module';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     ScheduleModule.forRoot(),
+    ThrottlerModule.forRoot([
+      { name: 'short', ttl: 60_000, limit: 30 }, // 30 req/min per IP (lookup)
+      { name: 'long', ttl: 3_600_000, limit: 20 }, // 20 req/h per IP (reports)
+    ]),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST || 'localhost',
@@ -35,5 +41,6 @@ import { AdminModule } from './admin/admin.module';
     WebReportsModule,
     AdminModule,
   ],
+  providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
 export class AppModule {}

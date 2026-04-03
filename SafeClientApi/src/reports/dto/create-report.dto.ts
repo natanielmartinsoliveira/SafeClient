@@ -6,15 +6,18 @@ import {
   IsString,
   MaxLength,
   ArrayMinSize,
+  Validate,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ContactType } from '../../common/enums/contact-type.enum';
 import { FlagType } from '../../common/enums/flag-type.enum';
+import { ContactFormatConstraint } from '../../common/validators/contact-format.validator';
 
 export class CreateReportDto {
   @ApiProperty({ example: '47991234567', description: 'Telefone, @usuario, e-mail, etc.' })
   @IsNotEmpty()
   @IsString()
+  @Validate(ContactFormatConstraint)
   contact: string;
 
   @ApiProperty({ enum: ContactType, example: ContactType.PHONE })

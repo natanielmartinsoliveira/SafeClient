@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CreateReportDto } from '../reports/dto/create-report.dto';
 import { ReportsService } from '../reports/reports.service';
@@ -11,6 +12,8 @@ import { ReportsService } from '../reports/reports.service';
 export class WebReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
+  // Max 5 reports per hour per IP
+  @Throttle({ long: { ttl: 3_600_000, limit: 5 } })
   @UseGuards(JwtAuthGuard)
   @Post()
   @ApiOperation({ summary: 'Publicar relato vinculado à conta do usuário autenticado' })

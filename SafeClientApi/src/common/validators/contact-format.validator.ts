@@ -1,0 +1,29 @@
+import {
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+  ValidationArguments,
+} from 'class-validator';
+import { ContactType } from '../enums/contact-type.enum';
+
+@ValidatorConstraint({ name: 'ContactFormat', async: false })
+export class ContactFormatConstraint implements ValidatorConstraintInterface {
+  validate(contact: string, args: ValidationArguments): boolean {
+    const dto = args.object as { contactType?: ContactType };
+    if (!contact || typeof contact !== 'string') return false;
+    switch (dto.contactType) {
+      case ContactType.PHONE:
+        return /^\d{10,11}$/.test(contact.replace(/\D/g, ''));
+      case ContactType.TELEGRAM:
+      case ContactType.INSTAGRAM:
+        return /^[a-zA-Z0-9._]{1,50}$/.test(contact.trim());
+      case ContactType.EMAIL:
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.trim());
+      default:
+        return false;
+    }
+  }
+
+  defaultMessage(): string {
+    return 'Formato de contato inválido para o tipo selecionado.';
+  }
+}

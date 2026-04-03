@@ -8,6 +8,8 @@
   },
   "Search": {
     "subtitle": "Avoid scams and unsafe clients using community reports",
+    "poweredBy": "Powered by anonymous community reports",
+    "analyzeHint": "See risk level, alerts and safety recommendations",
     "typePhone": "Phone",
     "typeTelegram": "Telegram",
     "typeInstagram": "Instagram",
@@ -18,7 +20,15 @@
     "emailPlaceholder": "email@example.com",
     "analyze": "🔍\u00a0 Analyze",
     "privacy": "🔒 Anonymous queries · Data protected",
-    "footer": "SafeClient · Protection and safety for professionals"
+    "privacyTitle": "🔒 Your data is protected",
+    "privacyBullet1": "Anonymized queries",
+    "privacyBullet2": "No personal data stored",
+    "privacyBullet3": "Hash-based system",
+    "socialProof": "+2,300 reports submitted this month",
+    "footer": "SafeClient · Protection and safety for professionals",
+    "errorPhone": "Invalid phone. Enter area code + number (10 or 11 digits).",
+    "errorHandle": "Invalid username (letters, numbers, dots and underscores only).",
+    "errorEmail": "Invalid email address."
   },
   "Login": {
     "title": "Sign in",
