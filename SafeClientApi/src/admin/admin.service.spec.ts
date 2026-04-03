@@ -9,7 +9,9 @@ import { NotFoundException } from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AdminService } from './admin.service';
 import { Report } from '../reports/report.entity';
+import { RemovalRequest } from '../removal-requests/removal-request.entity';
 import { UsersService } from '../users/users.service';
+import { RemovalCronService } from '../cron/removal-cron.service';
 import { User } from '../users/user.entity';
 import { FlagType } from '../common/enums/flag-type.enum';
 
@@ -19,12 +21,21 @@ const mockReportRepo = () => ({
   save: jest.fn(),
 });
 
+const mockRemovalRepo = () => ({
+  find: jest.fn().mockResolvedValue([]),
+  count: jest.fn().mockResolvedValue(0),
+});
+
 const mockUsersService = () => ({
   findAll: jest.fn(),
   findById: jest.fn(),
   create: jest.fn(),
   update: jest.fn(),
   remove: jest.fn(),
+});
+
+const mockCronService = () => ({
+  processRemovalRequests: jest.fn().mockResolvedValue(undefined),
 });
 
 describe('AdminService', () => {
@@ -37,7 +48,9 @@ describe('AdminService', () => {
       providers: [
         AdminService,
         { provide: getRepositoryToken(Report), useFactory: mockReportRepo },
+        { provide: getRepositoryToken(RemovalRequest), useFactory: mockRemovalRepo },
         { provide: UsersService, useFactory: mockUsersService },
+        { provide: RemovalCronService, useFactory: mockCronService },
       ],
     }).compile();
 
@@ -84,7 +97,12 @@ describe('AdminService', () => {
 
   describe('updateReport', () => {
     it('should update flags and description', async () => {
-      const report = { id: '1', flags: [FlagType.NAO_COMPARECEU], description: 'old', active: true } as Report;
+      const report = {
+        id: '1',
+        flags: [FlagType.NAO_COMPARECEU],
+        description: 'old',
+        active: true,
+      } as Report;
       reportRepo.findOne.mockResolvedValue(report);
       reportRepo.save.mockImplementation((r: Report) => Promise.resolve(r));
 
@@ -99,7 +117,9 @@ describe('AdminService', () => {
 
   describe('listUsers', () => {
     it('should return paginated users without passwordHash', async () => {
-      const users = [{ id: '1', email: 'a@b.com', role: 'user', passwordHash: 'secret', createdAt: new Date() }] as User[];
+      const users = [
+        { id: '1', email: 'a@b.com', role: 'user', passwordHash: 'secret', createdAt: new Date() },
+      ] as User[];
       usersService.findAll.mockResolvedValue([users, 1]);
 
       const result = await service.listUsers(1, 10);
@@ -110,7 +130,13 @@ describe('AdminService', () => {
 
   describe('createUser', () => {
     it('should create user and return without passwordHash', async () => {
-      const user = { id: '1', email: 'new@b.com', role: 'user', passwordHash: 'hash', createdAt: new Date() } as User;
+      const user = {
+        id: '1',
+        email: 'new@b.com',
+        role: 'user',
+        passwordHash: 'hash',
+        createdAt: new Date(),
+      } as User;
       usersService.create.mockResolvedValue(user);
 
       const result = await service.createUser({ email: 'new@b.com', password: 'senha1234' });
