@@ -1,9 +1,7 @@
 // Mock bcrypt before any imports to avoid native binary SIGSEGV in WSL/Jest
 jest.mock('bcryptjs', () => ({
   hash: jest.fn().mockResolvedValue('$2b$10$mockedhash'),
-  compare: jest.fn().mockImplementation((plain: string) =>
-    Promise.resolve(plain === 'senha1234'),
-  ),
+  compare: jest.fn().mockImplementation((plain: string) => Promise.resolve(plain === 'senha1234')),
 }));
 
 import { Test, TestingModule } from '@nestjs/testing';
@@ -53,14 +51,20 @@ describe('AuthService', () => {
     it('should throw ConflictException when email already exists', async () => {
       usersService.findByEmail.mockResolvedValue({ id: '1', email: 'a@b.com' } as User);
 
-      await expect(service.register({ email: 'a@b.com', password: 'senha1234' }))
-        .rejects.toThrow(ConflictException);
+      await expect(service.register({ email: 'a@b.com', password: 'senha1234' })).rejects.toThrow(
+        ConflictException,
+      );
     });
   });
 
   describe('login', () => {
     it('should return access_token and email on valid credentials', async () => {
-      const user = { id: '1', email: 'a@b.com', passwordHash: '$2b$10$mockedhash', role: 'user' } as User;
+      const user = {
+        id: '1',
+        email: 'a@b.com',
+        passwordHash: '$2b$10$mockedhash',
+        role: 'user',
+      } as User;
       usersService.findByEmail.mockResolvedValue(user);
 
       const result = await service.login({ email: 'a@b.com', password: 'senha1234' });
@@ -70,16 +74,23 @@ describe('AuthService', () => {
     it('should throw UnauthorizedException when user not found', async () => {
       usersService.findByEmail.mockResolvedValue(null);
 
-      await expect(service.login({ email: 'x@b.com', password: 'abc' }))
-        .rejects.toThrow(UnauthorizedException);
+      await expect(service.login({ email: 'x@b.com', password: 'abc' })).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
 
     it('should throw UnauthorizedException on wrong password', async () => {
-      const user = { id: '1', email: 'a@b.com', passwordHash: '$2b$10$mockedhash', role: 'user' } as User;
+      const user = {
+        id: '1',
+        email: 'a@b.com',
+        passwordHash: '$2b$10$mockedhash',
+        role: 'user',
+      } as User;
       usersService.findByEmail.mockResolvedValue(user);
 
-      await expect(service.login({ email: 'a@b.com', password: 'wrongpass' }))
-        .rejects.toThrow(UnauthorizedException);
+      await expect(service.login({ email: 'a@b.com', password: 'wrongpass' })).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
   });
 });

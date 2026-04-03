@@ -74,9 +74,7 @@ describe('Admin (e2e)', () => {
     });
 
     it('should reject unauthenticated request', () => {
-      return request(app.getHttpServer())
-        .get('/admin/stats')
-        .expect(401);
+      return request(app.getHttpServer()).get('/admin/stats').expect(401);
     });
   });
 

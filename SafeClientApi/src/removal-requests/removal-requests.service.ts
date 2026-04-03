@@ -20,7 +20,9 @@ export class RemovalRequestsService {
     });
 
     if (existing) {
-      throw new ConflictException('Já existe uma solicitação de remoção pendente para este contato.');
+      throw new ConflictException(
+        'Já existe uma solicitação de remoção pendente para este contato.',
+      );
     }
 
     const request = this.removalRepo.create({

@@ -18,10 +18,7 @@ describe('ContactsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        ContactsService,
-        { provide: ReportsService, useFactory: mockReportsService },
-      ],
+      providers: [ContactsService, { provide: ReportsService, useFactory: mockReportsService }],
     }).compile();
 
     service = module.get<ContactsService>(ContactsService);
@@ -36,9 +33,7 @@ describe('ContactsService', () => {
   });
 
   it('should return baixo risk for 1 report with no high-risk flags', async () => {
-    const reports = [
-      { flags: [FlagType.NAO_COMPARECEU], createdAt: new Date() },
-    ] as Report[];
+    const reports = [{ flags: [FlagType.NAO_COMPARECEU], createdAt: new Date() }] as Report[];
     reportsService.findByContactHash.mockResolvedValue(reports);
 
     const result = await service.lookup('11987654321', ContactType.PHONE);
@@ -68,9 +63,7 @@ describe('ContactsService', () => {
   });
 
   it('should return alto risk for high-risk flag even with 1 report', async () => {
-    const reports = [
-      { flags: [FlagType.TENTATIVA_GOLPE], createdAt: new Date() },
-    ] as Report[];
+    const reports = [{ flags: [FlagType.TENTATIVA_GOLPE], createdAt: new Date() }] as Report[];
     reportsService.findByContactHash.mockResolvedValue(reports);
 
     const result = await service.lookup('99999999999', ContactType.PHONE);
@@ -78,9 +71,7 @@ describe('ContactsService', () => {
   });
 
   it('should return recommendations based on flags', async () => {
-    const reports = [
-      { flags: [FlagType.PAGAMENTO_RECUSADO], createdAt: new Date() },
-    ] as Report[];
+    const reports = [{ flags: [FlagType.PAGAMENTO_RECUSADO], createdAt: new Date() }] as Report[];
     reportsService.findByContactHash.mockResolvedValue(reports);
 
     const result = await service.lookup('test', ContactType.EMAIL);

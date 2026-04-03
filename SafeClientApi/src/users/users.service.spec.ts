@@ -19,10 +19,7 @@ describe('UsersService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        UsersService,
-        { provide: getRepositoryToken(User), useFactory: mockRepo },
-      ],
+      providers: [UsersService, { provide: getRepositoryToken(User), useFactory: mockRepo }],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
@@ -64,7 +61,11 @@ describe('UsersService', () => {
       repo.save.mockResolvedValue(user);
 
       const result = await service.create('a@b.com', 'hash');
-      expect(repo.create).toHaveBeenCalledWith({ email: 'a@b.com', passwordHash: 'hash', role: 'user' });
+      expect(repo.create).toHaveBeenCalledWith({
+        email: 'a@b.com',
+        passwordHash: 'hash',
+        role: 'user',
+      });
       expect(result).toEqual(user);
     });
 
@@ -74,7 +75,11 @@ describe('UsersService', () => {
       repo.save.mockResolvedValue(user);
 
       const result = await service.create('admin@b.com', 'hash', 'admin');
-      expect(repo.create).toHaveBeenCalledWith({ email: 'admin@b.com', passwordHash: 'hash', role: 'admin' });
+      expect(repo.create).toHaveBeenCalledWith({
+        email: 'admin@b.com',
+        passwordHash: 'hash',
+        role: 'admin',
+      });
       expect(result.role).toBe('admin');
     });
   });

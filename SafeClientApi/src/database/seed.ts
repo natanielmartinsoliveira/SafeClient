@@ -216,11 +216,11 @@ const SEED_REPORTS: SeedReport[] = [
 
 async function main() {
   const client = new Client({
-    host:     process.env.DB_HOST     || 'localhost',
-    port:     parseInt(process.env.DB_PORT || '5432', 10),
-    user:     process.env.DB_USER     || 'safeclient',
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '5432', 10),
+    user: process.env.DB_USER || 'safeclient',
     password: process.env.DB_PASSWORD || 'safeclient_pass',
-    database: process.env.DB_NAME     || 'safeclient_db',
+    database: process.env.DB_NAME || 'safeclient_db',
   });
 
   await client.connect();
@@ -249,13 +249,13 @@ async function main() {
   }
 
   let inserted = 0;
-  let skipped  = 0;
+  let skipped = 0;
 
   for (const r of SEED_REPORTS) {
     const contactHash = hashContact(r.contact, r.contactType);
-    const flagsStr    = r.flags.join(',');
-    const id          = randomUuid();
-    const createdAt   = new Date();
+    const flagsStr = r.flags.join(',');
+    const id = randomUuid();
+    const createdAt = new Date();
     createdAt.setDate(createdAt.getDate() - (r.daysAgo ?? 0));
 
     try {

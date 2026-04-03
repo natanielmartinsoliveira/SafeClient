@@ -1,6 +1,6 @@
 export enum ContactType {
-  PHONE     = 'phone',
-  TELEGRAM  = 'telegram',
+  PHONE = 'phone',
+  TELEGRAM = 'telegram',
   INSTAGRAM = 'instagram',
-  EMAIL     = 'email',
+  EMAIL = 'email',
 }

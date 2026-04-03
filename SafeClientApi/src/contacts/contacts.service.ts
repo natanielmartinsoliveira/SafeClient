@@ -6,18 +6,27 @@ import { hashContact } from '../common/utils/contact-hasher.util';
 
 type RiskLevel = 'alto' | 'medio' | 'baixo';
 
-const HIGH_RISK_FLAGS: FlagType[] = [
-  FlagType.TENTATIVA_GOLPE,
-  FlagType.COMPORTAMENTO_AGRESSIVO,
-];
+const HIGH_RISK_FLAGS: FlagType[] = [FlagType.TENTATIVA_GOLPE, FlagType.COMPORTAMENTO_AGRESSIVO];
 
 const RECOMMENDATIONS: Record<FlagType, string[]> = {
-  [FlagType.TENTATIVA_GOLPE]:         ['Evite pagamento antecipado.', 'Confirme a identidade antes do encontro.'],
-  [FlagType.COMPORTAMENTO_AGRESSIVO]: ['Informe sua localização para alguém de confiança.', 'Tenha um plano de saída definido.'],
-  [FlagType.NAO_COMPARECEU]:          ['Confirme o encontro por mensagem antes de sair.', 'Peça sinal antes de se deslocar.'],
-  [FlagType.PERDA_DE_TEMPO]:          ['Confirme o encontro no dia com antecedência mínima de 1 hora.'],
-  [FlagType.PAGAMENTO_RECUSADO]:      ['Não forneça o serviço sem confirmação de pagamento.'],
-  [FlagType.PRESSAO_SEM_CAMISINHA]:   ['Nunca negocie o uso de preservativo.', 'Encerre o encontro se houver pressão.'],
+  [FlagType.TENTATIVA_GOLPE]: [
+    'Evite pagamento antecipado.',
+    'Confirme a identidade antes do encontro.',
+  ],
+  [FlagType.COMPORTAMENTO_AGRESSIVO]: [
+    'Informe sua localização para alguém de confiança.',
+    'Tenha um plano de saída definido.',
+  ],
+  [FlagType.NAO_COMPARECEU]: [
+    'Confirme o encontro por mensagem antes de sair.',
+    'Peça sinal antes de se deslocar.',
+  ],
+  [FlagType.PERDA_DE_TEMPO]: ['Confirme o encontro no dia com antecedência mínima de 1 hora.'],
+  [FlagType.PAGAMENTO_RECUSADO]: ['Não forneça o serviço sem confirmação de pagamento.'],
+  [FlagType.PRESSAO_SEM_CAMISINHA]: [
+    'Nunca negocie o uso de preservativo.',
+    'Encerre o encontro se houver pressão.',
+  ],
 };
 
 function computeRiskLevel(reportCount: number, flags: FlagType[]): RiskLevel {

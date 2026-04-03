@@ -31,7 +31,10 @@ export class UsersService {
     return this.repo.save(user);
   }
 
-  async update(id: string, data: Partial<Pick<User, 'email' | 'passwordHash' | 'role'>>): Promise<User | null> {
+  async update(
+    id: string,
+    data: Partial<Pick<User, 'email' | 'passwordHash' | 'role'>>,
+  ): Promise<User | null> {
     await this.repo.update(id, data);
     return this.findById(id);
   }
