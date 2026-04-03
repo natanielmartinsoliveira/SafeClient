@@ -111,7 +111,7 @@ export default function SearchPage({ userEmail: _userEmail }: Props) {
 
   return (
     <div
-      className="flex flex-col items-center justify-center px-4 py-16"
+      className="flex flex-col items-center justify-center px-4 py-6"
       style={{ minHeight: 'calc(100vh - 57px)', background: '#F5F0FF' }}
     >
       {/* Background decorations */}
