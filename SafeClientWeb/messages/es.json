@@ -102,6 +102,18 @@
     "pagamento_recusado": "Pago Rechazado",
     "pressao_sem_camisinha": "Presión sin condón"
   },
+  "Removal": {
+    "title": "Solicitar eliminación",
+    "subtitle": "Este es mi contacto y quiero eliminarlo",
+    "warning": "La solicitud será revisada en hasta 12 horas. Al enviar, confirmas que este contacto te pertenece.",
+    "reasonPlaceholder": "Motivo (opcional)...",
+    "submit": "Enviar solicitud",
+    "loading": "Enviando...",
+    "successTitle": "¡Solicitud recibida!",
+    "successMessage": "Los reportes de este contacto serán eliminados en hasta 12 horas.",
+    "errorDefault": "Error al enviar la solicitud.",
+    "errorConnection": "Error de conexión. Inténtalo de nuevo."
+  },
   "LocaleSwitcher": {
     "pt": "Português",
     "en": "English",

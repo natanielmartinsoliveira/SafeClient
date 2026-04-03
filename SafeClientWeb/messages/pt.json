@@ -102,6 +102,18 @@
     "pagamento_recusado": "Pagamento Recusado",
     "pressao_sem_camisinha": "Pressão Sem Camisinha"
   },
+  "Removal": {
+    "title": "Solicitar remoção",
+    "subtitle": "Este é o meu contato e quero removê-lo",
+    "warning": "A solicitação será analisada em até 12 horas. Ao solicitar, você confirma que este contato pertence a você.",
+    "reasonPlaceholder": "Motivo (opcional)...",
+    "submit": "Enviar solicitação",
+    "loading": "Enviando...",
+    "successTitle": "Solicitação recebida!",
+    "successMessage": "Em até 12 horas os relatos deste contato serão removidos.",
+    "errorDefault": "Erro ao enviar solicitação.",
+    "errorConnection": "Erro de conexão. Tente novamente."
+  },
   "LocaleSwitcher": {
     "pt": "Português",
     "en": "English",

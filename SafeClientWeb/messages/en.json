@@ -102,6 +102,18 @@
     "pagamento_recusado": "Refused Payment",
     "pressao_sem_camisinha": "Condom Pressure"
   },
+  "Removal": {
+    "title": "Request removal",
+    "subtitle": "This is my contact and I want it removed",
+    "warning": "Your request will be reviewed within 12 hours. By submitting, you confirm this contact belongs to you.",
+    "reasonPlaceholder": "Reason (optional)...",
+    "submit": "Submit request",
+    "loading": "Sending...",
+    "successTitle": "Request received!",
+    "successMessage": "Reports for this contact will be removed within 12 hours.",
+    "errorDefault": "Error submitting request.",
+    "errorConnection": "Connection error. Please try again."
+  },
   "LocaleSwitcher": {
     "pt": "Português",
     "en": "English",
