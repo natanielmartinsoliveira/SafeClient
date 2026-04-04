@@ -50,9 +50,11 @@ module.exports = {
     extra: {
       apiBaseUrl: process.env.API_BASE_URL || 'http://localhost:3000',
       appSigningSecret: process.env.APP_SIGNING_SECRET || '',
+      contactsApiKey: process.env.CONTACTS_API_KEY || '',
       eas: {
         projectId: '14de4d86-021a-40c4-ba76-7781e2dd1f3f',
       },
     },
   },
 };
+

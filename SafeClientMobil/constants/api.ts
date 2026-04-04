@@ -15,3 +15,10 @@ export const API_BASE_URL: string = extra.apiBaseUrl || 'http://localhost:3000';
  * defina manualmente no app.config.js.
  */
 export const APP_SIGNING_SECRET: string = extra.appSigningSecret || '';
+
+/**
+ * Chave de acesso para /contacts/lookup (server-to-server).
+ * Injetada pelo EAS: eas secret:create --scope project --name CONTACTS_API_KEY --value "..."
+ * Mesmo valor configurado em CONTACTS_API_KEY na SafeClient API.
+ */
+export const CONTACTS_API_KEY: string = extra.contactsApiKey || '';

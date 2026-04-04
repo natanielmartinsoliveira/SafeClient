@@ -4,15 +4,19 @@ import { Request } from 'express';
 import { nonceStore } from './nonce-store';
 
 /**
- * Guard de autenticação HMAC para o app mobile.
+ * Guard de autenticação para a SafeClient API.
  *
- * O app assina cada requisição com:
- *   HMAC-SHA256( "${timestamp}:${nonce}:${method}:${path}", APP_SIGNING_SECRET )
+ * Rotas HMAC (app mobile / web server):
+ *   Assina com HMAC-SHA256( "${timestamp}:${nonce}:${method}:${path}", APP_SIGNING_SECRET )
  *
- * Proteções:
+ * Rota /contacts/ (server-to-server):
+ *   Aceita x-api-key (bot, web Next.js, mobile atualizado)
+ *   OU HMAC (mobile legado / web legado) como fallback
+ *
+ * Proteções HMAC:
  *   - Sem o secret → assinatura inválida
- *   - Timestamp fora de ±30s → rejeitado (relógio desync tolerado)
- *   - Nonce já usado → rejeitado (replay attack)
+ *   - Timestamp fora de ±windowSec → rejeitado
+ *   - Nonce já usado → rejeitado (anti-replay)
  */
 @Injectable()
 export class AppAuthGuard implements CanActivate {
@@ -24,19 +28,70 @@ export class AppAuthGuard implements CanActivate {
     // Preflight CORS — deixa passar sem autenticação
     if (req.method === 'OPTIONS') return true;
 
-    // Em desenvolvimento, bypassa HMAC para facilitar testes via Swagger/curl
+    // Em desenvolvimento, bypassa tudo para facilitar testes via Swagger/curl
     if (process.env.NODE_ENV !== 'production') return true;
 
-    // Rotas públicas (sem HMAC): auth + web + admin + consulta + remoção
+    // /contacts/ — aceita x-api-key OU HMAC
+    if (req.path.startsWith('/contacts/')) {
+      return this.checkContactsAuth(req);
+    }
+
+    // Rotas públicas sem qualquer autenticação
     if (
       req.path.startsWith('/auth/') ||
       req.path.startsWith('/web/') ||
       req.path.startsWith('/admin/') ||
-      req.path.startsWith('/contacts/') ||
       req.path.startsWith('/removal-requests')
     )
       return true;
 
+    // Demais rotas — HMAC completo
+    return this.validateHmac(req);
+  }
+
+  /**
+   * /contacts/ aceita dois mecanismos de autenticação:
+   *   1. x-api-key  → server-to-server (bot, web Next.js, mobile atualizado)
+   *   2. HMAC       → fallback para clientes legados que ainda não atualizaram
+   *
+   * Se CONTACTS_API_KEY não estiver configurado, permite acesso (opt-in).
+   */
+  private checkContactsAuth(req: Request): boolean {
+    const configuredKey = process.env.CONTACTS_API_KEY;
+
+    // Chave não configurada → acesso permitido (compatibilidade retroativa)
+    if (!configuredKey) return true;
+
+    const providedKey = (req.headers['x-api-key'] as string) ?? '';
+
+    if (providedKey) {
+      // x-api-key presente → valida com timingSafeEqual (previne timing attack)
+      const pad = 64;
+      const a = Buffer.from(configuredKey.padEnd(pad, '\0').substring(0, pad));
+      const b = Buffer.from(providedKey.padEnd(pad, '\0').substring(0, pad));
+
+      if (!crypto.timingSafeEqual(a, b)) {
+        throw new UnauthorizedException('API key inválida.');
+      }
+      return true;
+    }
+
+    // Sem x-api-key → tenta HMAC (fallback para clientes legados)
+    const timestamp = req.headers['x-timestamp'] as string;
+    const nonce = req.headers['x-nonce'] as string;
+    const signature = req.headers['x-signature'] as string;
+
+    if (timestamp && nonce && signature) {
+      return this.validateHmac(req);
+    }
+
+    throw new UnauthorizedException('Autenticação necessária: envie x-api-key ou headers HMAC.');
+  }
+
+  /**
+   * Validação HMAC completa — usada por rotas protegidas e como fallback de /contacts/.
+   */
+  private validateHmac(req: Request): boolean {
     const timestamp = req.headers['x-timestamp'] as string;
     const nonce = req.headers['x-nonce'] as string;
     const signature = req.headers['x-signature'] as string;

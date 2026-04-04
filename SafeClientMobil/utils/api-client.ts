@@ -1,6 +1,6 @@
 import HmacSHA256 from 'crypto-js/hmac-sha256';
 import Hex from 'crypto-js/enc-hex';
-import { API_BASE_URL, APP_SIGNING_SECRET } from '@/constants/api';
+import { API_BASE_URL, APP_SIGNING_SECRET, CONTACTS_API_KEY } from '@/constants/api';
 
 function generateNonce(): string {
   return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
@@ -80,9 +80,21 @@ export interface RemovalRequestPayload {
   reason?: string;
 }
 
+/**
+ * Consulta de contato — usa x-api-key se disponível, HMAC como fallback.
+ * O guard da API aceita ambos os métodos para /contacts/lookup.
+ */
 export function lookupContact(contact: string, contactType: ContactType): Promise<LookupResult> {
   const params = new URLSearchParams({ contact, contactType });
-  return apiRequest<LookupResult>(`/contacts/lookup?${params}`);
+  const extraHeaders: Record<string, string> = {};
+
+  if (CONTACTS_API_KEY) {
+    extraHeaders['x-api-key'] = CONTACTS_API_KEY;
+  }
+
+  return apiRequest<LookupResult>(`/contacts/lookup?${params}`, {
+    headers: extraHeaders,
+  });
 }
 
 export function createReport(payload: CreateReportPayload): Promise<{ id: string; createdAt: string }> {
